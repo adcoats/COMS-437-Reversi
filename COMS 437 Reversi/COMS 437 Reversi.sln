@@ -1,7 +1,7 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2015
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COMS 437 Reversi.CSharp", "COMS 437 Reversi.CSharp.csproj", "{CA17BA48-E8F9-0D97-B6A3-5FF14A4DFE63}"
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{33DC61EB-651D-8E56-0EE8-AB482C82DC8D}") = "COMS 437 Reversi", "Assembly-CSharp.csproj", "{0AA97060-38A9-FE21-1F73-7AB6EF0DA822}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,12 +9,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CA17BA48-E8F9-0D97-B6A3-5FF14A4DFE63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CA17BA48-E8F9-0D97-B6A3-5FF14A4DFE63}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CA17BA48-E8F9-0D97-B6A3-5FF14A4DFE63}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CA17BA48-E8F9-0D97-B6A3-5FF14A4DFE63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AA97060-38A9-FE21-1F73-7AB6EF0DA822}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AA97060-38A9-FE21-1F73-7AB6EF0DA822}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AA97060-38A9-FE21-1F73-7AB6EF0DA822}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AA97060-38A9-FE21-1F73-7AB6EF0DA822}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
 	EndGlobalSection
 EndGlobal
