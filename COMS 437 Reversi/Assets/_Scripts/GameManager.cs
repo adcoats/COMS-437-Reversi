@@ -9,8 +9,9 @@ public class GameManager : MonoBehaviour {
 	public Player currentPlayer;
 	public CollisionCube cube;
 
-	public bool endTurn;
-	public bool reset;
+	private bool endTurn;
+	private bool reset;
+	private bool movesDisplayed;
 
 	private int width = 8;
 	private int hieght = 8;
@@ -18,15 +19,20 @@ public class GameManager : MonoBehaviour {
 	public GamePiece [,] pieces;
 	public CollisionCube [,] cubes;
 	public Vector3 initPos;
+	public Vector3 player1Spawn;
+	public Vector3 player2Spawn;
 
 	// Use this for initialization
 	void Awake () {
 		endTurn = false;
 		reset = false;
+		movesDisplayed = false;
 		grid = new Vector3[hieght, width];
 		pieces = new GamePiece[hieght, width];
 		cubes = new CollisionCube[hieght, width];
 		initPos =  new Vector3(-3.5f, 1.1f, 3.5f);
+		player1Spawn = new Vector3 (0, 5, 7);
+		player2Spawn = new Vector3 (0, 5, -7);
 		currentPlayer = player1;
 		float x = initPos.x; float y = initPos.y; float z = initPos.z;
 		Debug.Log ("Setting up Vector3 grid");
@@ -60,19 +66,19 @@ public class GameManager : MonoBehaviour {
 		pieces = new GamePiece[hieght, width];
 
 		pieces[3,3] = (GamePiece) Instantiate (gamePiece, grid[3,3], Quaternion.identity);
-		player1.addGamePiece (3, 3);
+		player2.addGamePiece (3, 3);
 		cubes [3, 3].setGamePiece (3, 3);
 
 		pieces[3,4] = (GamePiece) Instantiate (gamePiece, grid[3,4], Quaternion.identity);
-		player2.addGamePiece (3, 4);
+		player1.addGamePiece (3, 4);
 		cubes [3, 4].setGamePiece (3, 4);
 
 		pieces[4,3] = (GamePiece) Instantiate (gamePiece, grid[4,3], Quaternion.identity);
-		player2.addGamePiece (4, 3);
+		player1.addGamePiece (4, 3);
 		cubes [4, 3].setGamePiece (4, 3);
 
 		pieces[4,4] = (GamePiece) Instantiate (gamePiece, grid[4,4], Quaternion.identity);
-		player1.addGamePiece (4, 4);
+		player2.addGamePiece (4, 4);
 		cubes [4, 4].setGamePiece (4, 4);
 	}
 
@@ -88,6 +94,59 @@ public class GameManager : MonoBehaviour {
 		currentPlayer.addGamePiece (x, y);
 	}
 
+	public void endMyTurn()
+	{
+		endTurn = true;
+	}
+	public void resetGame()
+	{
+		reset = true;
+	}
+
+	public CollisionCube [,] getValidMoves()
+	{
+		// loop through every square
+		for (int i = 0; i < cubes.GetLength (0); i++) {
+			for (int j = 0; j < cubes.GetLength (1); j++) {
+				// check if square is adjacent to any square of the opposite color
+
+
+			}
+		}
+
+		return cubes;
+
+
+		// for each adjacent piece of opposite color, continue searching in that
+		// direction until you find a gap (invalid) or a piece of the same color.
+
+		// for each of the opponents pieces colected in search, build new board state.
+
+		// send this board state to the minimax algorithm, scored by number of pieces each
+		// player has on the board.
+	}
+
+	public void displayAvailableMoves()
+	{
+		setMoves (true, getValidMoves());
+		movesDisplayed = true;
+	}
+
+	public void hideMoves ()
+	{
+		setMoves (false, cubes);
+		movesDisplayed = false;
+	}
+
+	public void setMoves(bool status, CollisionCube [,] tempCubes)
+	{
+		for (int i = 0; i < cubes.GetLength(0); i++) {
+			for (int j = 0; j < cubes.GetLength (1); j++) {
+				tempCubes [i, j].setRenderer (status);
+			}
+		}
+	}
+
 	// Update is called once per frame
 	void Update () {
 		if (endTurn) {
@@ -99,14 +158,6 @@ public class GameManager : MonoBehaviour {
 			endTurn = false;
 		}
 		if (reset) {
-//			player1 = new Player ();
-//			player2 = new Player ();
-//			player1.isWhite = false;
-//			player2.isAI = true;
-//			player2.isWhite = true;
-//			currentPlayer = player1;
-//			Awake ();
-//			Start ();
 			SceneManager.LoadScene("Reversi");
 			reset = false;
 		}

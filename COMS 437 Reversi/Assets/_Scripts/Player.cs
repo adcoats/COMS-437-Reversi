@@ -21,16 +21,14 @@ public class Player : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
-		if (!isWhite)
-		{
 
-		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+		if (gameManager.currentPlayer.Equals(this)){
+			gameManager.displayAvailableMoves ();
+		}
 	}
 
 	public void addGamePiece(int x, int y)
@@ -39,5 +37,18 @@ public class Player : MonoBehaviour {
 		if (!isWhite)
 			gp.transform.Rotate (new Vector3 (0, 0, 180));
 		myPieces.Add (gameManager.pieces[x, y]);
+	}
+
+	public int getNumPieces()
+	{
+		return myPieces.Count;
+	}
+
+
+	// AI
+
+	public void chooseMove()
+	{
+
 	}
 }
