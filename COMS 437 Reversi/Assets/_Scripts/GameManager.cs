@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour {
 	public GamePiece gamePiece;
@@ -103,18 +104,24 @@ public class GameManager : MonoBehaviour {
 		reset = true;
 	}
 
-	public CollisionCube [,] getValidMoves()
+	public List<CollisionCube> getValidMoves()
 	{
+		List<CollisionCube> tempList = new List<CollisionCube>();
 		// loop through every square
 		for (int i = 0; i < cubes.GetLength (0); i++) {
 			for (int j = 0; j < cubes.GetLength (1); j++) {
 				// check if square is adjacent to any square of the opposite color
+				CollisionCube temp = cubes[i,j];
+				int x = i;
+				int y = j;
 
+
+				tempList.Add(temp);
 
 			}
 		}
 
-		return cubes;
+		return tempList;
 
 
 		// for each adjacent piece of opposite color, continue searching in that
@@ -138,12 +145,18 @@ public class GameManager : MonoBehaviour {
 		movesDisplayed = false;
 	}
 
-	public void setMoves(bool status, CollisionCube [,] tempCubes)
+//	public void setMoves(bool status, CollisionCube [,] tempCubes)
+//	{
+//		for (int i = 0; i < cubes.GetLength(0); i++) {
+//			for (int j = 0; j < cubes.GetLength (1); j++) {
+//				tempCubes [i, j].setRenderer (status);
+//			}
+//		}
+//	}
+	public void setMoves(bool status, List<CollisionCube> tempCubes)
 	{
 		for (int i = 0; i < cubes.GetLength(0); i++) {
-			for (int j = 0; j < cubes.GetLength (1); j++) {
-				tempCubes [i, j].setRenderer (status);
-			}
+			tempCubes[i].setRenderer (status);
 		}
 	}
 

@@ -54,6 +54,7 @@ public class GamePiece : MonoBehaviour {
 			flip = true;
 			caseNum = 1;
 			//speed = 3;
+
 		}
 	}
 
