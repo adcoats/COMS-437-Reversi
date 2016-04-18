@@ -4,8 +4,12 @@ using System.Collections;
 public class CollisionCube : MonoBehaviour {
 	public GameManager gameManager;
 	public GamePiece gamePiece;
+	public Move move;
 	private GamePiece myPiece;
+	public bool enableClick;
 	private int x, y;
+
+
 	// Use this for initialization
 	void Start () {
 //		MeshRenderer mr = gameObject.GetComponent<MeshRenderer> ();
@@ -19,22 +23,28 @@ public class CollisionCube : MonoBehaviour {
 		Renderer r = gameObject.GetComponent<Renderer> ();
 		r.material.SetColor ("_Color", new Color (1.0f, 0.0f, 1.0f, 0.25f));
 		r.enabled = false;
+		enableClick = false;
 
 		//r.material.color = new Color (1.0f, 0.0f, 1.0f, 0.25f);
 	}
 
 	void OnMouseDown()
 	{
-		if (myPiece == null) {
+		applyMove ();
+	}
+	public void applyMove()
+	{
+		if (myPiece == null && enableClick) {
+			// spawn and move GamePiece to CollisionCube
 			if (gameManager.currentPlayer.Equals (gameManager.player1)) {
 				myPiece = (GamePiece)Instantiate (gamePiece, gameManager.player1Spawn, Quaternion.identity);
 			} else {
 				myPiece = (GamePiece)Instantiate (gamePiece, gameManager.player2Spawn, Quaternion.identity);
 			}
 			myPiece.enableMove (transform.position);
+			gameManager.applyMove (move);
 			gameManager.addPiece (myPiece, x, y);
 			gameManager.endMyTurn ();
-			gameManager.hideMoves ();
 		}
 	}
 
@@ -66,5 +76,10 @@ public class CollisionCube : MonoBehaviour {
 	public void setGamePiece(int x, int y)
 	{
 		myPiece = gameManager.pieces [x, y];
+	}
+
+	public GamePiece getGamePiece()
+	{
+		return myPiece;
 	}
 }

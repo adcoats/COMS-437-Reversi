@@ -8,6 +8,9 @@ public class GamePiece : MonoBehaviour {
 	int caseNum;
 	int rotated;
 	int speed;
+	public bool isWhite;
+	public int x;
+	public int y;
 	//bool endTranslate;
 	Quaternion target;
 	Vector3 destination;
@@ -20,7 +23,7 @@ public class GamePiece : MonoBehaviour {
 		caseNum = 0;
 		//target = Quaternion.LookRotation(-transform.forward, Vector3.up);
 		destination = transform.position;
-
+		isWhite = false;
 
 	}
 
@@ -54,7 +57,10 @@ public class GamePiece : MonoBehaviour {
 			flip = true;
 			caseNum = 1;
 			//speed = 3;
-
+			if (isWhite)
+				isWhite = false;
+			else
+				isWhite = true;
 		}
 	}
 
@@ -85,7 +91,7 @@ public class GamePiece : MonoBehaviour {
 			Debug.Log ("speed:");
 			Debug.Log (speed);
 			Vector3 temp = Vector3.MoveTowards(transform.position, destination, speed * Time.deltaTime * 3);
-			Debug.Log ("temo:");
+			Debug.Log ("temp:");
 			Debug.Log (temp);
 			transform.position = temp;
 		} else {

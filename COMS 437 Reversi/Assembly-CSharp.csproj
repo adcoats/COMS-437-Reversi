@@ -49,6 +49,8 @@
      <Compile Include="Assets\_Scripts\CollisionCube.cs" />
      <Compile Include="Assets\_Scripts\GameManager.cs" />
      <Compile Include="Assets\_Scripts\GamePiece.cs" />
+     <Compile Include="Assets\_Scripts\Move.cs" />
+     <Compile Include="Assets\_Scripts\MoveSelector.cs" />
      <Compile Include="Assets\_Scripts\Player.cs" />
      <Compile Include="Assets\_Scripts\getSize.cs" />
      <Compile Include="Assets\_Scripts\setPos.cs" />

@@ -9,10 +9,11 @@ public class GameManager : MonoBehaviour {
 	public Player player2;
 	public Player currentPlayer;
 	public CollisionCube cube;
+	public MoveSelector moveSelector;
 
 	private bool endTurn;
 	private bool reset;
-	private bool movesDisplayed;
+	public bool movesDisplayed;
 
 	private int width = 8;
 	private int hieght = 8;
@@ -25,6 +26,9 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
+		moveSelector = new MoveSelector ();
+		moveSelector.gameManager = this;
+
 		endTurn = false;
 		reset = false;
 		movesDisplayed = false;
@@ -98,45 +102,108 @@ public class GameManager : MonoBehaviour {
 	public void endMyTurn()
 	{
 		endTurn = true;
+		hideMoves ();
 	}
 	public void resetGame()
 	{
 		reset = true;
 	}
 
-	public List<CollisionCube> getValidMoves()
+//	public List<CollisionCube> getValidMoves()
+//	{
+//		//Debug.Log ("In method getVaildMoves");
+//		List<CollisionCube> tempList = new List<CollisionCube>();
+//		// loop through every square
+//		for (int i = 0; i < cubes.GetLength (0); i++) 
+//		{
+//			//Debug.Log ("i = " + i);
+//			for (int j = 0; j < cubes.GetLength (1); j++) 
+//			{
+//				//Debug.Log ("j = " + j);
+//				// check if square is adjacent to any square containing a GamePiece of the opposite color
+//				CollisionCube temp = cubes[i,j];
+//				// is cube occupied?
+//				if (temp.getGamePiece() != null)
+//					continue;
+//				bool valid = false;
+//				// loop through all 8 adjacent squares until proven valid
+//				for (int x = i - 1; x <= i + 1; x++) 
+//				{
+//					//Debug.Log ("x = " + x);
+//					for (int y = j - 1; y <= j + 1; y++) 
+//					{
+//						//Debug.Log ("y = " + y);
+//						// ignore if square is the chosen square
+//						if ((x == i && y == j))
+//							continue;
+//						// check if space is valid based on the adjacent square
+//						Debug.Log("current space: " + i + ", " + j);
+//						valid = isValidMove (temp, x, y);
+//						Debug.Log ("Is valid: " + valid);
+//						// if proven valid, add space to list and break
+//						if (valid) {
+//							tempList.Add (temp);
+//							break;
+//						}
+//					}
+//					// if valid, break
+//					if (valid) {break;}
+//				}
+//				//tempList.Add(temp);
+//			}
+//		}
+//
+//		return tempList;
+//
+//
+//		// for each adjacent piece of opposite color, continue searching in that
+//		// direction until you find a gap (invalid) or a piece of the same color.
+//
+//		// for each of the opponents pieces colected in search, build new board state.
+//
+//		// send this board state to the minimax algorithm, scored by number of pieces each
+//		// player has on the board.
+//	}
+
+//	public bool isOutOfBounds(int x, int y)
+//	{
+//		if ( ( x < 0 || y < 0 ) || ( x >= cubes.GetLength(0) || y >= cubes.GetLength(1) ) ) {
+//			return true;
+//		} else {
+//			return false;
+//		}
+//	}
+//	private bool isValidMove(CollisionCube space, int x, int y)
+//	{
+//		//  check if out of bounds
+//		Debug.Log("Checking bounds: " + x + ", " + y);
+//		if (!isOutOfBounds(x, y))
+//		{
+//			Debug.Log ("Within bounds: " + x + ", " + y);
+//			CollisionCube adjacent = cubes [x, y];
+//			// space is occupied by a GamePiece
+//			if (adjacent.getGamePiece() != null) {
+//				Debug.Log ("Adjacent has a GamePiece");
+//				// player and GamePiece are different colors
+//				Debug.Log ("Player is white:" + currentPlayer.isWhite + ", Adjacent piece is white: " + adjacent.getGamePiece().isWhite);
+//				if (currentPlayer.isWhite != adjacent.getGamePiece().isWhite) {
+//					return true;
+//				}
+//			}
+//		}
+//		return false;
+//	}
+
+	public List<Move> displayAvailableMoves()
 	{
-		List<CollisionCube> tempList = new List<CollisionCube>();
-		// loop through every square
-		for (int i = 0; i < cubes.GetLength (0); i++) {
-			for (int j = 0; j < cubes.GetLength (1); j++) {
-				// check if square is adjacent to any square of the opposite color
-				CollisionCube temp = cubes[i,j];
-				int x = i;
-				int y = j;
-
-
-				tempList.Add(temp);
-
-			}
-		}
-
-		return tempList;
-
-
-		// for each adjacent piece of opposite color, continue searching in that
-		// direction until you find a gap (invalid) or a piece of the same color.
-
-		// for each of the opponents pieces colected in search, build new board state.
-
-		// send this board state to the minimax algorithm, scored by number of pieces each
-		// player has on the board.
-	}
-
-	public void displayAvailableMoves()
-	{
-		setMoves (true, getValidMoves());
+		List<Move> moves = new List<Move> ();
+		if (currentPlayer.Equals(player1))
+			moves = moveSelector.getValidMoves(1);
+		else
+			moves = moveSelector.getValidMoves(-1);
+		setMoves (true, moves);
 		movesDisplayed = true;
+		return moves;
 	}
 
 	public void hideMoves ()
@@ -145,18 +212,32 @@ public class GameManager : MonoBehaviour {
 		movesDisplayed = false;
 	}
 
-//	public void setMoves(bool status, CollisionCube [,] tempCubes)
-//	{
-//		for (int i = 0; i < cubes.GetLength(0); i++) {
-//			for (int j = 0; j < cubes.GetLength (1); j++) {
-//				tempCubes [i, j].setRenderer (status);
-//			}
-//		}
-//	}
-	public void setMoves(bool status, List<CollisionCube> tempCubes)
+	// enables or disables the renderer for the selection of CollisionCube objects
+	public void setMoves(bool status, CollisionCube [,] tempCubes)
 	{
 		for (int i = 0; i < cubes.GetLength(0); i++) {
+			for (int j = 0; j < cubes.GetLength (1); j++) {
+				tempCubes [i, j].setRenderer (status);
+				tempCubes [i, j].enableClick = status;
+			}
+		}
+	}
+	public void setMoves(bool status, List<CollisionCube> tempCubes)
+	{
+		Debug.Log (tempCubes.Count);
+		for (int i = 0; i < tempCubes.Count; i++) {
 			tempCubes[i].setRenderer (status);
+			tempCubes [i].enableClick = status;
+		}
+	}
+
+	public void setMoves (bool status, List<Move> moves)
+	{
+		foreach (Move temp in moves) 
+		{
+			cubes [(int)temp.move.x, (int)temp.move.y].setRenderer (status);
+			cubes [(int)temp.move.x, (int)temp.move.y].enableClick = status;
+			cubes [(int)temp.move.x, (int)temp.move.y].move = temp;
 		}
 	}
 
@@ -165,6 +246,7 @@ public class GameManager : MonoBehaviour {
 		if (endTurn) {
 			if (currentPlayer.Equals (player1)) {
 				currentPlayer = player2;
+
 			} else {
 				currentPlayer = player1;
 			}
@@ -175,4 +257,111 @@ public class GameManager : MonoBehaviour {
 			reset = false;
 		}
 	}
+
+	public void applyMove(Move move)
+	{
+		moveSelector.setBoard (move.board);
+	}
+
+
+
+
+
+
+
+
+//	public List<CollisionCube> getValidMoves2()
+//	{
+//		// list of valid cubes
+//		List<CollisionCube> tempCubes = new List<CollisionCube>();
+//		// list of opponents GamePieces
+//		List<GamePiece> tempPieces;
+//		if (currentPlayer.Equals (player1)) {
+//			tempPieces = player2.getPieces ();
+//		} else {
+//			tempPieces = player1.getPieces ();
+//		}
+//
+//		// check adjacent squares for valid moves
+//		foreach (GamePiece gp in tempPieces) 
+//		{
+//			// check all 8 adjacent squares
+//			for (int x = gp.x - 1; x <= gp.x + 1; x++) 
+//			{
+//				for (int y = gp.y - 1; y <= gp.y + 1; y++) 
+//				{
+//					if (x == gp.x && y == gp.y)
+//						continue;
+//					// make sure square is within the bound of the board
+//					Debug.Log("Checking bounds: " + x + ", " + y);
+//					if (!isOutOfBounds (x, y)) 
+//					{
+//						Debug.Log ("Within bounds: " + x + ", " + y);
+//						CollisionCube adjacent = cubes [x, y];
+//						// make sure space is empty
+//						if (adjacent.getGamePiece () == null) 
+//						{
+//							Debug.Log ("Adjacent is empty");
+//							// make sure space isn't already in list
+//							if (!tempCubes.Contains (adjacent)) {
+//								//Debug.Log ("Adding cube to list");
+//								// check for opponent colored pieces in spaces adjacent to the potential move
+//								for (int i = x - 1; i <= x + 1; i++) 
+//								{
+//									for (int j = y - 1; j <= y + 1; j++) 
+//									{
+//										Debug.Log("Checking bounds: " + i + ", " + j);
+//										// make sure square is within the bound of the board
+//										if (!isOutOfBounds (i, j)) 
+//										{
+//											Debug.Log ("Within bounds: " + i + ", " + j);
+//											CollisionCube adjacent2 = cubes [i, j];
+//											// make sure space is not empty
+//											if (adjacent2.getGamePiece () != null) 
+//											{
+//												// make sure the game piece belongs to the opponent
+//												if (player1.isWhite != adjacent2.getGamePiece ())
+//												{
+//													int dx = i - x;
+//													int dy = j - y;
+//													Vector2 vect2 = new Vector2 (dx, dy);
+//
+//												}
+//											}
+//										}
+//									}
+//								}
+//
+//
+//								// 
+//								tempCubes.Add (adjacent);
+//							}
+//						}
+//					}
+//				}
+//			}
+//		}
+//		return tempCubes;
+//	}
+
+//	private bool isValidMove2(CollisionCube space, int x, int y)
+//	{
+//		//  check if out of bounds
+//		Debug.Log("Checking bounds: " + x + ", " + y);
+//		if (!isOutOfBounds(x, y))
+//		{
+//			Debug.Log ("Within bounds: " + x + ", " + y);
+//			CollisionCube adjacent = cubes [x, y];
+//			// space is occupied by a GamePiece
+//			if (adjacent.getGamePiece() != null) {
+//				Debug.Log ("Adjacent has a GamePiece");
+//				// player and GamePiece are different colors
+//				Debug.Log ("Player is white:" + currentPlayer.isWhite + ", Adjacent piece is white: " + adjacent.getGamePiece().isWhite);
+//				if (currentPlayer.isWhite != adjacent.getGamePiece().isWhite) {
+//					return true;
+//				}
+//			}
+//		}
+//		return false;
+//	}
 }
