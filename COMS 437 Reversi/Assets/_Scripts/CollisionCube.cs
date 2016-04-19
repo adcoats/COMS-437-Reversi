@@ -9,7 +9,6 @@ public class CollisionCube : MonoBehaviour {
 	public bool enableClick;
 	private int x, y;
 
-
 	// Use this for initialization
 	void Start () {
 //		MeshRenderer mr = gameObject.GetComponent<MeshRenderer> ();
@@ -35,6 +34,7 @@ public class CollisionCube : MonoBehaviour {
 	public void applyMove()
 	{
 		if (myPiece == null && enableClick) {
+			gameManager.moveInProgress = true;
 			// spawn and move GamePiece to CollisionCube
 			if (gameManager.currentPlayer.Equals (gameManager.player1)) {
 				myPiece = (GamePiece)Instantiate (gamePiece, gameManager.player1Spawn, Quaternion.identity);
@@ -79,10 +79,14 @@ public class CollisionCube : MonoBehaviour {
 	public void setGamePiece(GamePiece gp)
 	{
 		myPiece = gp;
+		myPiece.x = this.x;
+		myPiece.y = this.y;
 	}
 	public void setGamePiece(int x, int y)
 	{
 		myPiece = gameManager.pieces [x, y];
+		myPiece.x = this.x;
+		myPiece.y = this.y;
 	}
 
 	public GamePiece getGamePiece()

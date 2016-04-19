@@ -32,15 +32,17 @@ public class Player : MonoBehaviour {
 	void Update () {
 		if (gameManager.currentPlayer.Equals (this)) 
 		{
-			if (!gameManager.movesDisplayed) {
-				moves = gameManager.displayAvailableMoves ();
-			}
+			if (gameManager.moveInProgress == false) {
+				if (!gameManager.movesDisplayed) {
+					moves = gameManager.displayAvailableMoves ();
+				}
 //			if (isAI) {
 //				//chose move
 //				chooseMoveNaive();
 //			}
 
-			myTurn = true;
+				myTurn = true;
+			}
 		} else {
 			myTurn = false;
 		}
@@ -73,6 +75,10 @@ public class Player : MonoBehaviour {
 		return myPieces.Count;
 	}
 
+	public void removeAllPieces()
+	{
+		myPieces = new List<GamePiece> ();
+	}
 
 	// AI
 	// assumed to be player2, so look for min

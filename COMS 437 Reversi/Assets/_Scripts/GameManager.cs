@@ -23,12 +23,14 @@ public class GameManager : MonoBehaviour {
 	public Vector3 initPos;
 	public Vector3 player1Spawn;
 	public Vector3 player2Spawn;
+	public bool moveInProgress;
 
 	// Use this for initialization
 	void Awake () {
 		moveSelector = new MoveSelector ();
 		moveSelector.gameManager = this;
 
+		moveInProgress = false;
 		endTurn = false;
 		reset = false;
 		movesDisplayed = false;
@@ -268,16 +270,40 @@ public class GameManager : MonoBehaviour {
 			GamePiece gp = cubes [(int)pos.x, (int)pos.y].getGamePiece();
 			// flip piece
 			gp.enableFlip ();
-			// swap piece between players
-			if (player1.getPieces ().Contains (gp)) {
-				player1.removePiece (gp);
-			} else {
-				player1.addGamePiece (gp);
-			}
-			if (player2.getPieces ().Contains (gp)) {
-				player2.removePiece (gp);
-			} else {
-				player2.addGamePiece (gp);
+//			// swap piece between players
+//			if (player1.getPieces ().Contains (gp)) {
+//				player1.removePiece (gp);
+//			} else {
+//				player1.addGamePiece (gp);
+//			}
+//			if (player2.getPieces ().Contains (gp)) {
+//				player2.removePiece (gp);
+//			} else {
+//				player2.addGamePiece (gp);
+//			}
+
+			updatePlayer (player1, move);
+			updatePlayer (player2, move);
+		}
+		moveInProgress = false;
+	}
+
+	void updatePlayer(Player p, Move m)
+	{
+		p.removeAllPieces ();
+		for (int x = 0; x < m.board.GetLength (0); x++) 
+		{
+			for (int y = 0; y < m.board.GetLength (1); y++) 
+			{
+				if (p.isWhite) {
+					if (m.board [x, y] == -1) {
+						p.addGamePiece (cubes [x, y].getGamePiece ());
+					}
+				} else {
+					if (m.board [x, y] == 1) {
+						p.addGamePiece (cubes [x, y].getGamePiece ());
+					}
+				}
 			}
 		}
 	}
