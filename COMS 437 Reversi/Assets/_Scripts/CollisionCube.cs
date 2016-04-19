@@ -41,11 +41,18 @@ public class CollisionCube : MonoBehaviour {
 			} else {
 				myPiece = (GamePiece)Instantiate (gamePiece, gameManager.player2Spawn, Quaternion.identity);
 			}
+			myPiece.x = this.x;
+			myPiece.y = this.y;
 			myPiece.enableMove (transform.position);
 			gameManager.applyMove (move);
 			gameManager.addPiece (myPiece, x, y);
 			gameManager.endMyTurn ();
 		}
+	}
+
+	public void flipPiece()
+	{
+		myPiece.enableFlip ();
 	}
 
 	// Update is called once per frame

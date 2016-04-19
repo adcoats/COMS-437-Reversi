@@ -46,7 +46,7 @@ public class GamePiece : MonoBehaviour {
 //		}
 //	}
 
-	void enableFlip ()
+	public void enableFlip ()
 	{
 		if (!flip)
 		{

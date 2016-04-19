@@ -2,7 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Move : MonoBehaviour {
+public class Move// : MonoBehaviour 
+{
 
 	public Vector2 move;
 	public int moveValue;

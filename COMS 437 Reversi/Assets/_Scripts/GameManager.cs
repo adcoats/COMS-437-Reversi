@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour {
 		player2Spawn = new Vector3 (0, 5, -7);
 		currentPlayer = player1;
 		float x = initPos.x; float y = initPos.y; float z = initPos.z;
-		Debug.Log ("Setting up Vector3 grid");
+		//Debug.Log ("Setting up Vector3 grid");
 		for (int i = 0; i < hieght; i++) 
 		{
 			x = initPos.x;
@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour {
 			{
 				// set vector coordinates
 				grid [i, j] = new Vector3 (x, y, z);
-				Debug.Log (x + ", " + z + "\n");
+				//Debug.Log (x + ", " + z + "\n");
 				//pieces [i, j] = (GameObject)Instantiate (gamePiece, new Vector3 (x, y, z), Quaternion.identity);
 				cubes [i, j] = (CollisionCube)Instantiate (cube, new Vector3 (x, y, z), Quaternion.identity);
 				cubes [i, j].setIndices (i, j);
@@ -201,6 +201,7 @@ public class GameManager : MonoBehaviour {
 			moves = moveSelector.getValidMoves(1);
 		else
 			moves = moveSelector.getValidMoves(-1);
+		Debug.Log (moves.Count);
 		setMoves (true, moves);
 		movesDisplayed = true;
 		return moves;
@@ -261,6 +262,24 @@ public class GameManager : MonoBehaviour {
 	public void applyMove(Move move)
 	{
 		moveSelector.setBoard (move.board);
+		//flip pieces
+		foreach (Vector2 pos in move.changes) 
+		{
+			GamePiece gp = cubes [(int)pos.x, (int)pos.y].getGamePiece();
+			// flip piece
+			gp.enableFlip ();
+			// swap piece between players
+			if (player1.getPieces ().Contains (gp)) {
+				player1.removePiece (gp);
+			} else {
+				player1.addGamePiece (gp);
+			}
+			if (player2.getPieces ().Contains (gp)) {
+				player2.removePiece (gp);
+			} else {
+				player2.addGamePiece (gp);
+			}
+		}
 	}
 
 

@@ -2,7 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class MoveSelector : MonoBehaviour {
+public class MoveSelector //: MonoBehaviour 
+{
 
 	public GameManager gameManager;
 
@@ -11,6 +12,13 @@ public class MoveSelector : MonoBehaviour {
 	private int width, height;
 
 	void Awake()
+	{
+		width = height = 8;
+		board = new int[width, height];
+		init ();
+	}
+
+	public MoveSelector()
 	{
 		width = height = 8;
 		board = new int[width, height];
