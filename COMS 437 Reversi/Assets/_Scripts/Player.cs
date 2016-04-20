@@ -14,6 +14,7 @@ public class Player : MonoBehaviour {
 
 	public bool isWhite;
 	public bool isAI;
+	public int difficulty;
 	private bool myTurn;
 
 	void Awake()
@@ -21,25 +22,42 @@ public class Player : MonoBehaviour {
 		myPieces = new List<GamePiece> ();
 		moves = new List<Move> ();
 		myTurn = false;
+		isAI = false;
+		difficulty = 1;
 	}
 
-	// Use this for initialization
-	void Start () {
-
+	public void setDifficulty(int value)
+	{
+		if (value < 1)
+			value = 1;
+		else if (value > 10)
+			value = 10;
+		difficulty = value;
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		if (gameManager.currentPlayer.Equals (this)) 
 		{
-			if (gameManager.moveInProgress == false) {
-				if (!gameManager.movesDisplayed) {
-					moves = gameManager.displayAvailableMoves ();
+			if (gameManager.moveInProgress == false) 
+			{
+				if (!gameManager.movesDisplayed) 
+				{
+					moves = gameManager.displayAvailableMoves (isAI);
 				}
-//			if (isAI) {
-//				//chose move
-//				chooseMoveNaive();
-//			}
+				if (isAI) 
+				{
+					if (moves.Count < 1) {
+						gameManager.endMyTurn ();
+						myTurn = false;
+					} else {
+						chooseMoveNegaMax ();
+					}
+					//chose move
+					//chooseMoveNaive();
+
+					
+				}
 
 				myTurn = true;
 			}
@@ -80,6 +98,11 @@ public class Player : MonoBehaviour {
 		myPieces = new List<GamePiece> ();
 	}
 
+	public void toggleAI()
+	{
+		isAI = !isAI;
+	}
+
 	// AI
 	// assumed to be player2, so look for min
 	public void chooseMoveNaive()
@@ -95,9 +118,12 @@ public class Player : MonoBehaviour {
 			}
 			// now that we have the min, find any move with same score
 			int[] options = new int[moves.Count];
+			index = 0;
 			for (int x = 0; x < moves.Count; x++) {
 				if (moves [x].score == min) {
-					options [options.GetLength (0)] = x;
+//					options [options.GetLength (0)] = x;
+					options [index] = x;
+					index++;
 				}
 			}
 			// now select an option randomly
@@ -107,5 +133,47 @@ public class Player : MonoBehaviour {
 			gameManager.cubes [(int)moves [choice].move.x, (int)moves [choice].move.y].applyMove ();
 		} else
 			gameManager.endMyTurn ();
+	}
+
+	private void chooseMoveNegaMax()
+	{
+		Move startNode = gameManager.moveSelector.evaluate (-1);
+		Move alpha = new Move ();
+		alpha.score = int.MinValue;
+		Move beta = new Move ();
+		beta.score = int.MaxValue;
+		Move move = negaMax (startNode, difficulty, alpha, beta, -1);
+	}
+	public Move negaMax(Move node, int depth, Move alpha, Move beta, int color)
+	{
+		if (depth == 0 || node.moves.Count < 1) {
+			node.score = color * node.score;
+			return node;
+		}
+
+		Move bestValue = new Move ();
+		bestValue.score = int.MinValue;
+
+		List<Move> childNodes = node.getMoves (color);
+
+		foreach (Move child in childNodes) {
+			beta.score *= -1;
+			alpha.score *= -1;
+			Move value = negaMax (child, depth - 1, beta, alpha, -color);
+			value.score *= -1;
+			bestValue = max (value, bestValue);
+			alpha = max (alpha, value);
+			if (alpha.score >= beta.score)
+				break;
+		}
+		return bestValue;
+	}
+
+	private Move max(Move m1, Move m2)
+	{
+		if (m1.score > m2.score)
+			return m1;
+		else
+			return m2;
 	}
 }

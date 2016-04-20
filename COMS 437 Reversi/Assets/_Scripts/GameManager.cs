@@ -10,10 +10,12 @@ public class GameManager : MonoBehaviour {
 	public Player currentPlayer;
 	public CollisionCube cube;
 	public MoveSelector moveSelector;
+	public WinText winText;
 
 	private bool endTurn;
 	private bool reset;
 	public bool movesDisplayed;
+	public bool pieceFlipping;
 
 	private int width = 8;
 	private int hieght = 8;
@@ -25,11 +27,19 @@ public class GameManager : MonoBehaviour {
 	public Vector3 player2Spawn;
 	public bool moveInProgress;
 
+	private int skipped;
+	// last space being animated;
+	private CollisionCube last;
+
+
 	// Use this for initialization
 	void Awake () {
 		moveSelector = new MoveSelector ();
 		moveSelector.gameManager = this;
 
+		skipped = 0;
+
+		pieceFlipping = false;
 		moveInProgress = false;
 		endTurn = false;
 		reset = false;
@@ -58,7 +68,7 @@ public class GameManager : MonoBehaviour {
 			}
 			z -= 1;
 		}
-
+		last = cubes [0, 0];
 	}
 
 	void Start()
@@ -196,16 +206,20 @@ public class GameManager : MonoBehaviour {
 //		return false;
 //	}
 
-	public List<Move> displayAvailableMoves()
+	public List<Move> displayAvailableMoves(bool ai)
 	{
 		List<Move> moves = new List<Move> ();
 		if (currentPlayer.Equals(player1))
-			moves = moveSelector.getValidMoves(1);
+			moves = moveSelector.getValidMoves(1, ai);
 		else
-			moves = moveSelector.getValidMoves(-1);
+			moves = moveSelector.getValidMoves(-1, ai);
 		Debug.Log (moves.Count);
 		setMoves (true, moves);
 		movesDisplayed = true;
+		if (moves.Count < 1)
+			skipped++;
+		else
+			skipped = 0;
 		return moves;
 	}
 
@@ -222,6 +236,8 @@ public class GameManager : MonoBehaviour {
 			for (int j = 0; j < cubes.GetLength (1); j++) {
 				tempCubes [i, j].setRenderer (status);
 				tempCubes [i, j].enableClick = status;
+				if (status == false)
+					tempCubes [i, j].move = null;
 			}
 		}
 	}
@@ -231,6 +247,8 @@ public class GameManager : MonoBehaviour {
 		for (int i = 0; i < tempCubes.Count; i++) {
 			tempCubes[i].setRenderer (status);
 			tempCubes [i].enableClick = status;
+			if (status == false)
+				tempCubes [i].move = null;
 		}
 	}
 
@@ -240,7 +258,10 @@ public class GameManager : MonoBehaviour {
 		{
 			cubes [(int)temp.move.x, (int)temp.move.y].setRenderer (status);
 			cubes [(int)temp.move.x, (int)temp.move.y].enableClick = status;
-			cubes [(int)temp.move.x, (int)temp.move.y].move = temp;
+			if (status == true)
+				cubes [(int)temp.move.x, (int)temp.move.y].move = temp;
+			else 
+				cubes [(int)temp.move.x, (int)temp.move.y].move = null;
 		}
 	}
 
@@ -259,12 +280,27 @@ public class GameManager : MonoBehaviour {
 			SceneManager.LoadScene("Reversi");
 			reset = false;
 		}
+		if (skipped >= 2) 
+		{
+			// show win text
+			winText.activate ();
+			// disable interaction
+			for(int x = 0; x < cubes.GetLength(0); x++) {
+				for (int y = 0; y < cubes.GetLength (1); y++) {
+					cubes [x, y].enableClick = false;
+				}
+			}
+		}
+		if (last.getGamePiece() != null && last.getGamePiece().flip == false)
+			moveInProgress = false;
 	}
 
 	public void applyMove(Move move)
 	{
 		moveSelector.setBoard (move.board);
 		//flip pieces
+		//CollisionCube temp = cubes[(int)move.changes[move.changes.Count-1].x, (int)move.changes[move.changes.Count-1].y];
+		last = cubes[(int)move.changes[move.changes.Count-1].x, (int)move.changes[move.changes.Count-1].y];
 		foreach (Vector2 pos in move.changes) 
 		{
 			GamePiece gp = cubes [(int)pos.x, (int)pos.y].getGamePiece();
@@ -285,7 +321,15 @@ public class GameManager : MonoBehaviour {
 			updatePlayer (player1, move);
 			updatePlayer (player2, move);
 		}
-		moveInProgress = false;
+		endMyTurn ();
+
+		// allow time for animations
+		System.Diagnostics.Stopwatch s = new System.Diagnostics.Stopwatch();
+//		s.Start ();
+//		while (s.Elapsed < System.TimeSpan.FromSeconds (2)) {}
+//		s.Stop ();
+
+		//moveInProgress = false;
 	}
 
 	void updatePlayer(Player p, Move m)

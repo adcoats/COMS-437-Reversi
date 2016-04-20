@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class CollisionCube : MonoBehaviour {
 	public GameManager gameManager;
@@ -31,6 +32,31 @@ public class CollisionCube : MonoBehaviour {
 	{
 		applyMove ();
 	}
+
+	void OnMouseOver()
+	{
+		if (this.move != null) {
+			List<Vector2> spaces = this.move.changes;
+			foreach (Vector2 space in spaces) {
+				CollisionCube temp = gameManager.cubes [(int)space.x, (int)space.y];
+				Renderer r = temp.gameObject.GetComponent<Renderer> ();
+				r.material.SetColor ("_Color", new Color (1.0f, 1.0f, 0.0f, 0.25f));
+				r.enabled = true;
+			}
+		}
+	}
+	void OnMouseExit()
+	{
+		if (this.move != null) {
+			List<Vector2> spaces = this.move.changes;
+			foreach (Vector2 space in spaces) {
+				CollisionCube temp = gameManager.cubes [(int)space.x, (int)space.y];
+				Renderer r = temp.gameObject.GetComponent<Renderer> ();
+				r.material.SetColor ("_Color", new Color (1.0f, 0.0f, 1.0f, 0.25f));
+				r.enabled = false;
+			}
+		}
+	}
 	public void applyMove()
 	{
 		if (myPiece == null && enableClick) {
@@ -44,9 +70,11 @@ public class CollisionCube : MonoBehaviour {
 			myPiece.x = this.x;
 			myPiece.y = this.y;
 			myPiece.enableMove (transform.position);
+			// wait for move to finish
+			//while (myPiece.move){}
 			gameManager.applyMove (move);
 			gameManager.addPiece (myPiece, x, y);
-			gameManager.endMyTurn ();
+			//gameManager.endMyTurn ();
 		}
 	}
 

@@ -45,6 +45,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\_Scripts\AIText.cs" />
      <Compile Include="Assets\_Scripts\CollisionCube.cs" />
      <Compile Include="Assets\_Scripts\CurrentPlayer.cs" />
      <Compile Include="Assets\_Scripts\GameManager.cs" />
@@ -53,6 +54,7 @@
      <Compile Include="Assets\_Scripts\MoveSelector.cs" />
      <Compile Include="Assets\_Scripts\Player.cs" />
      <Compile Include="Assets\_Scripts\Score.cs" />
+     <Compile Include="Assets\_Scripts\WinText.cs" />
      <Compile Include="Assets\_Scripts\getSize.cs" />
      <Compile Include="Assets\_Scripts\setPos.cs" />
  <Reference Include="UnityEngine.UI">

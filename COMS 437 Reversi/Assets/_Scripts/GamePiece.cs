@@ -3,8 +3,8 @@ using System.Collections;
 
 public class GamePiece : MonoBehaviour {
 
-	bool flip;
-	bool move;
+	public bool flip;
+	public bool move;
 	int caseNum;
 	int rotated;
 	int speed;
@@ -68,8 +68,8 @@ public class GamePiece : MonoBehaviour {
 	{
 		if (!move)
 		{
-			Debug.Log ("dest:");
-			Debug.Log (dest);
+//			Debug.Log ("dest:");
+//			Debug.Log (dest);
 			move = true;
 			destination = dest;
 		}
@@ -78,26 +78,26 @@ public class GamePiece : MonoBehaviour {
 	void movePiece()
 	{
 		if (Vector3.Distance (transform.position, destination) > 0.05f) {
-			Debug.Log (Vector3.Distance (transform.position, destination));
-			Debug.Log ("Current Position:");
-			Debug.Log (transform.position);
-			Debug.Log ("Destination:");
-			Debug.Log (destination);
+//			Debug.Log (Vector3.Distance (transform.position, destination));
+//			Debug.Log ("Current Position:");
+//			Debug.Log (transform.position);
+//			Debug.Log ("Destination:");
+//			Debug.Log (destination);
 
 //			Vector3 direction = destination - transform.position;
 //			direction.Normalize ();
 //			this.transform.Translate (direction.x * speed * Time.deltaTime, direction.y * speed * Time.deltaTime, direction.z * speed * Time.deltaTime, Space.World);
 			//Vector3 temp = Vector3.MoveTowards(transform.position, destination, speed * Time.deltaTime);
-			Debug.Log ("speed:");
-			Debug.Log (speed);
+//			Debug.Log ("speed:");
+//			Debug.Log (speed);
 			Vector3 temp = Vector3.MoveTowards(transform.position, destination, speed * Time.deltaTime * 3);
-			Debug.Log ("temp:");
-			Debug.Log (temp);
+//			Debug.Log ("temp:");
+//			Debug.Log (temp);
 			transform.position = temp;
 		} else {
 			transform.position = destination;
 			move = false;
-			Debug.Log ("done");
+//			Debug.Log ("done");
 			//enableFlip ();
 		}
 	}
@@ -135,7 +135,7 @@ public class GamePiece : MonoBehaviour {
 				//transform.rotation = Quaternion.Lerp (transform.rotation, target, 0.05f);
 				transform.Rotate(0,0,speed);
 				rotated += speed;
-				Debug.Log ("Rotated:\n" + rotated);
+//				Debug.Log ("Rotated:\n" + rotated);
 
 			} else {
 				//transform.rotation = target;

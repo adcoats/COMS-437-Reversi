@@ -16,6 +16,5 @@ C:\Users\Arik\Documents\GitHub\COMS-437-Reversi\COMS 437 Reversi\Temp\bin\Debug\
 C:\Users\Arik\Documents\GitHub\COMS-437-Reversi\COMS 437 Reversi\Temp\bin\Debug\UnityEditor.xml
 C:\Users\Arik\Documents\GitHub\COMS-437-Reversi\COMS 437 Reversi\Temp\bin\Debug\UnityEngine.UI.xml
 C:\Users\Arik\Documents\GitHub\COMS-437-Reversi\COMS 437 Reversi\Temp\bin\Debug\UnityEngine.Networking.xml
-C:\Users\Arik\Documents\GitHub\COMS-437-Reversi\COMS 437 Reversi\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
 C:\Users\Arik\Documents\GitHub\COMS-437-Reversi\COMS 437 Reversi\obj\Debug\Assembly-CSharp.dll
 C:\Users\Arik\Documents\GitHub\COMS-437-Reversi\COMS 437 Reversi\obj\Debug\Assembly-CSharp.pdb

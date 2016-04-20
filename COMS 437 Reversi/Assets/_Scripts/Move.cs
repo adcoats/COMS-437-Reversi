@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -10,6 +11,7 @@ public class Move// : MonoBehaviour
 	public List<Vector2> changes;
 	public int [,] board;
 	public int score;
+	public List<Move> moves;
 
 	public int getBoardScore()
 	{
@@ -31,5 +33,15 @@ public class Move// : MonoBehaviour
 		{
 			board [(int)temp.x, (int)temp.y] *= -1;
 		}
+	}
+
+	public List<Move> getMoves(int player)
+	{
+		MoveSelector ms = new MoveSelector ();
+		int[,] tempBoard = new int[8, 8];
+		Array.Copy (this.board, tempBoard, this.board.Length);
+		ms.setBoard (tempBoard);
+		moves = ms.getValidMoves (player, true);
+		return moves;
 	}
 }

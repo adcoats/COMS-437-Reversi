@@ -1,15 +1,17 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\_Scripts\MoveSelector.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\_Scripts\Move.cs">
     <Files>
-      <File FileName="Assets\_Scripts\GamePiece.cs" Line="98" Column="37" />
-      <File FileName="Assets\_Scripts\MoveSelector.cs" Line="158" Column="1" />
-      <File FileName="Assets\_Scripts\Move.cs" Line="1" Column="1" />
-      <File FileName="Assets\_Scripts\GameManager.cs" Line="33" Column="4" />
-      <File FileName="Assets\_Scripts\CollisionCube.cs" Line="1" Column="1" />
-      <File FileName="Assets\_Scripts\Player.cs" Line="1" Column="1" />
-      <File FileName="Assets\_Scripts\Score.cs" Line="1" Column="1" />
+      <File FileName="Assets\_Scripts\MoveSelector.cs" Line="2" Column="1" />
+      <File FileName="Assets\_Scripts\Move.cs" Line="43" Column="27" />
+      <File FileName="Assets\_Scripts\GamePiece.cs" Line="7" Column="9" />
+      <File FileName="Assets\_Scripts\GameManager.cs" Line="215" Column="47" />
+      <File FileName="Assets\_Scripts\CollisionCube.cs" Line="77" Column="6" />
+      <File FileName="Assets\_Scripts\Player.cs" Line="166" Column="34" />
       <File FileName="Assets\_Scripts\CurrentPlayer.cs" Line="1" Column="1" />
+      <File FileName="Assets\_Scripts\Score.cs" Line="15" Column="3" />
+      <File FileName="Assets\_Scripts\AIText.cs" Line="8" Column="2" />
+      <File FileName="Assets\_Scripts\WinText.cs" Line="21" Column="33" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
